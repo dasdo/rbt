@@ -1,0 +1,26 @@
+<?php
+
+namespace Database\Factories;
+
+use App\Models\CategoryParent;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class CategoryFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     */
+    public function definition(): array
+    {
+        return [
+            'name' => fake()->name(),
+            'slug' => fake()->slug(),
+            'description' => fake()->text(),
+            'parent_id' => fake()->word(),
+            'image' => fake()->word(),
+            'is_active' => fake()->boolean(),
+            'sort_order' => fake()->numberBetween(-10000, 10000),
+            'category_parent_id' => CategoryParent::factory(),
+        ];
+    }
+}

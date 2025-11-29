@@ -1,0 +1,70 @@
+models:
+  User:
+    name: string
+    email: string:unique
+    email_verified_at: timestamp nullable
+    password: string
+    role: string default('customer')
+    phone: string nullable
+    address: text nullable
+    is_active: boolean default(true)
+    remember_token: string nullable
+    timestamps
+    relationships:
+      hasMany: InventoryMovement
+
+  Category:
+    name: string
+    slug: string:unique
+    description: text nullable
+    parent_id: foreignId nullable:references('id'):on('categories')
+    image: string nullable
+    is_active: boolean default(true)
+    sort_order: integer default(0)
+    timestamps
+    relationships:
+      hasMany: Product
+      belongsTo: Category parent
+
+  Product:
+    name: string
+    slug: string:unique
+    sku: string:unique
+    description: text nullable
+    short_description: text nullable
+    category_id: foreignId:references('id'):on('categories')
+    price: decimal(10,2)
+    cost_price: decimal(10,2) nullable
+    sale_price: decimal(10,2) nullable
+    weight: decimal(8,2) nullable
+    dimensions: string nullable
+    brand: string nullable
+    model: string nullable
+    specifications: text nullable
+    image: string nullable
+    images: text nullable
+    is_active: boolean default(true)
+    is_featured: boolean default(false)
+    stock_status: string default('in_stock')
+    reorder_point: integer default(0)
+    timestamps
+    relationships:
+      belongsTo: Category
+      hasMany: InventoryMovement
+
+  InventoryMovement:
+    product_id: foreignId:references('id'):on('products')
+    movement_type: string
+    quantity: integer
+    previous_stock: integer
+    new_stock: integer
+    reference_type: string nullable
+    reference_id: unsignedBigInteger nullable
+    notes: text nullable
+    user_id: foreignId nullable:references('id'):on('users')
+    location: string nullable
+    timestamps
+    relationships:
+      belongsTo:
+        - Product
+        - User

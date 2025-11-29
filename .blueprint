@@ -1,0 +1,18 @@
+created:
+    - database/factories/UserFactory.php
+    - database/factories/CategoryFactory.php
+    - database/factories/ProductFactory.php
+    - database/factories/InventoryMovementFactory.php
+    - database/migrations/2025_11_29_191923_create_users_table.php
+    - database/migrations/2025_11_29_191924_create_categories_table.php
+    - database/migrations/2025_11_29_191925_create_products_table.php
+    - database/migrations/2025_11_29_191926_create_inventory_movements_table.php
+    - app/Models/User.php
+    - app/Models/Category.php
+    - app/Models/Product.php
+    - app/Models/InventoryMovement.php
+models:
+    User: { name: string, email: 'string:unique', email_verified_at: 'timestamp nullable', password: string, role: "string default('customer')", phone: 'string nullable', address: 'text nullable', is_active: 'boolean default(true)', remember_token: 'string nullable', timestamps: timestamps, relationships: { hasMany: InventoryMovement } }
+    Category: { name: string, slug: 'string:unique', description: 'text nullable', parent_id: "foreignId nullable:references('id'):on('categories')", image: 'string nullable', is_active: 'boolean default(true)', sort_order: 'integer default(0)', timestamps: timestamps, relationships: { hasMany: Product, belongsTo: 'Category parent' } }
+    Product: { name: string, slug: 'string:unique', sku: 'string:unique', description: 'text nullable', short_description: 'text nullable', category_id: "foreignId:references('id'):on('categories')", price: 'decimal(10,2)', cost_price: 'decimal(10,2) nullable', sale_price: 'decimal(10,2) nullable', weight: 'decimal(8,2) nullable', dimensions: 'string nullable', brand: 'string nullable', model: 'string nullable', specifications: 'text nullable', image: 'string nullable', images: 'text nullable', is_active: 'boolean default(true)', is_featured: 'boolean default(false)', stock_status: "string default('in_stock')", reorder_point: 'integer default(0)', timestamps: timestamps, relationships: { belongsTo: Category, hasMany: InventoryMovement } }
+    InventoryMovement: { product_id: "foreignId:references('id'):on('products')", movement_type: string, quantity: integer, previous_stock: integer, new_stock: integer, reference_type: 'string nullable', reference_id: 'unsignedBigInteger nullable', notes: 'text nullable', user_id: "foreignId nullable:references('id'):on('users')", location: 'string nullable', timestamps: timestamps, relationships: { belongsTo: 'Product User' } }
