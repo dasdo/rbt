@@ -16,18 +16,25 @@ class CategoryForm
         return $schema
             ->components([
                 TextInput::make('name')
+                    ->label(__('categories.name'))
                     ->required(),
                 TextInput::make('slug')
+                    ->label(__('categories.slug'))
                     ->required(),
                 Textarea::make('description')
+                    ->label(__('categories.description'))
                     ->columnSpanFull(),
                 Select::make('parent_id')
+                    ->label(__('categories.parent'))
                     ->relationship('parent', 'name'),
                 FileUpload::make('image')
+                    ->label(__('categories.image'))
                     ->image(),
                 Toggle::make('is_active')
+                    ->label(__('categories.is_active'))
                     ->required(),
                 TextInput::make('sort_order')
+                    ->label(__('categories.sort_order'))
                     ->required()
                     ->numeric()
                     ->default(0),

@@ -22,7 +22,22 @@ class ProductResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $recordTitleAttribute = 'Products';
+    protected static ?string $recordTitleAttribute = 'name';
+
+    public static function getLabel(): string
+    {
+        return __('products.singular');
+    }
+
+    public static function getPluralLabel(): string
+    {
+        return __('products.title');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('products.title');
+    }
 
     public static function form(Schema $schema): Schema
     {

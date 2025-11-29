@@ -2,7 +2,10 @@
 
 namespace App\Providers\Filament;
 
+use App\Helpers\LocaleHelper;
 use Filament\Http\Middleware\Authenticate;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -18,11 +21,17 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Filament\Navigation\MenuItem;
+use App\Http\Middleware\SetLocale;
 
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+        // Set locale from session before building panel
+        $locale = Session::get('locale', config('app.locale'));
+        App::setLocale($locale);
+        
         return $panel
             ->default()
             ->id('admin')
@@ -45,6 +54,7 @@ class AdminPanelProvider extends PanelProvider
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
+                SetLocale::class,
                 AuthenticateSession::class,
                 ShareErrorsFromSession::class,
                 VerifyCsrfToken::class,
@@ -54,6 +64,24 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+            ])
+            ->userMenuItems([
+                MenuItem::make()
+                    ->label(function () {
+                        $currentLocale = LocaleHelper::getCurrentLocale();
+                        App::setLocale($currentLocale);
+                        return trans('locale.spanish') . ($currentLocale === 'es' ? ' ✓' : '');
+                    })
+                    ->icon('heroicon-o-language')
+                    ->url(url('/locale/es')),
+                MenuItem::make()
+                    ->label(function () {
+                        $currentLocale = LocaleHelper::getCurrentLocale();
+                        App::setLocale($currentLocale);
+                        return trans('locale.english') . ($currentLocale === 'en' ? ' ✓' : '');
+                    })
+                    ->icon('heroicon-o-language')
+                    ->url(url('/locale/en')),
             ]);
     }
 }

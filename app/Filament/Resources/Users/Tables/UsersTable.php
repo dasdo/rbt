@@ -19,24 +19,31 @@ class UsersTable
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label(__('users.name'))
                     ->searchable(),
                 TextColumn::make('email')
-                    ->label('Email address')
+                    ->label(__('users.email'))
                     ->searchable(),
                 TextColumn::make('email_verified_at')
+                    ->label(__('users.email') . ' ' . __('common.created_at'))
                     ->dateTime()
                     ->sortable(),
                 TextColumn::make('role')
+                    ->label(__('users.role'))
                     ->searchable(),
                 TextColumn::make('phone')
+                    ->label(__('users.phone'))
                     ->searchable(),
                 IconColumn::make('is_active')
+                    ->label(__('users.is_active'))
                     ->boolean(),
                 TextColumn::make('created_at')
+                    ->label(__('common.created_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
+                    ->label(__('common.updated_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
